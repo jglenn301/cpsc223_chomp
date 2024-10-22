@@ -4,10 +4,19 @@
 
 struct _chomp_state
 {
-  size_t cols;
-  size_t *heights;
+  size_t cols; // number of columns
+  size_t *heights; // brownies left in each column
 };
 
+/**
+ * Creates a new chomp state with the given number of columns
+ * and remaining brownies in each column.  The new state takes
+ * ownership of the array of remaining brownies.
+ *
+ * @param cols a positive integer
+ * @param heights an array of cols nonnegative integers
+ * @return a pointer to the corresponding state
+ */
 static chomp_state *chomp_init(size_t cols, size_t *heights)
 {
   chomp_state *s = malloc(sizeof(*s));
