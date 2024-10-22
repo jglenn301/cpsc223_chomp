@@ -119,9 +119,9 @@ int chomp_compare(const void *p1, const void *p2)
     }
 }
 
-void chomp_free(void *s)
+void chomp_free(void *p)
 {
-  chomp_destroy((chomp_state *)s);
+  chomp_destroy((chomp_state *)p);
 }
 
 void chomp_destroy(chomp_state *s)
