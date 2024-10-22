@@ -17,8 +17,8 @@ typedef struct
 } chomp_move;
 
 /**
- * Creates the initial chomp state with a full pan of the given size.  The caller
- * owns the resulting dynamically allocated state,
+ * Creates the initial chomp state with a full pan of the given size.
+ * The caller owns the resulting dynamically allocated state,
  *
  * @param rows a positive integer
  * @param cols a positive integer
@@ -27,9 +27,9 @@ typedef struct
 chomp_state *chomp_initial(size_t rows, size_t cols);
 
 /**
- * Creates a chomp state with the given number of brownies remaining in each column.
- * The caller owns the resulting dynamically allocated state and retains ownership
- * of the array passed in.
+ * Creates a chomp state with the given number of brownies remaining
+ * in each column.  The caller owns the resulting dynamically
+ * allocated state and retains ownership of the array passed in.
  *
  * @param cols a positive integer
  * @param heights an array of cols nonnegative integers
@@ -65,8 +65,8 @@ size_t chomp_get_width(const chomp_state *s);
 size_t chomp_get_height(const chomp_state *s, size_t col);
 
 /**
- * Creates the chomp state resulting from making the given move in the given state.
- * The caller owns the resulting dynamically allocated state,
+ * Creates the chomp state resulting from making the given move in the given
+ * state.  The caller owns the resulting dynamically allocated state.
  *
  * @param s a valid pointer to a state, non-NULL
  * @param move a valid move in state s
@@ -74,14 +74,43 @@ size_t chomp_get_height(const chomp_state *s, size_t col);
  */
 chomp_state *chomp_next(const chomp_state *s, const chomp_move *move);
 
-size_t chomp_hash(const void * s);
-
-int chomp_compare(const void *s1, const void *s2);
-
-void chomp_free(void *s);
+/**
+ * Computes the hash value for the given state.
+ *
+ * @param p a valid pointer to a state, non-NULL
+ * @return the hash value
+ */
+size_t chomp_hash(const void *p);
 
 /**
- * Destroys the given state, releasing any allocated resources belonging to it.
+ * Compares the two states.  The return value is negative if the first
+ * state comes first, positive if the second comes first, and 0 if the
+ * states are equal.
+ *
+ * @param p1 a valid pointer to a state, non-NULL
+ * @param p2 a valid pointer to a state, non-NULL
+ * @return the result of the comparison
+ */
+int chomp_compare(const void *p1, const void *p2);
+
+/**
+ * Creates a copy of the given state.  The caller owns the resulting
+ * copy.
+ *
+ * @param p a valid pointer to a state, non-NULL
+ */
+void *chomp_copy(const void *p)
+
+/**
+ * Destroys the given chomp state.
+ *
+ * @param p a valid pointer to a state, non-NULL
+ */
+void chomp_free(void *p);
+
+/**
+ * Destroys the given state, releasing any allocated resources belonging
+ * to it.
  *
  * @param s a valid pointer to a state, non-NULL
  */
