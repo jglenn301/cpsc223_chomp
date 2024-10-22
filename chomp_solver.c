@@ -12,7 +12,7 @@
  * @param start a valid pointer to a state, non-NULL
  * @param win a valid pointer to a move, non-NULL
  */
-void solve_chomp(const chomp_state *start, chomp_move *win, gmap *memo);
+void solve_chomp(const chomp_state *start, chomp_move *win);
 
 int main(int argc, char **argv)
 {
@@ -58,7 +58,7 @@ int main(int argc, char **argv)
   return 0;
 }
    
-void solve_chomp(const chomp_state *start, chomp_move *win, gmap *memo)
+void solve_chomp(const chomp_state *start, chomp_move *win)
 {
   if (chomp_is_terminal(start))
     {
