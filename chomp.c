@@ -73,9 +73,51 @@ chomp_state *chomp_next(const chomp_state *s, const chomp_move *move)
   return chomp_init(s->cols, heights);
 }
 
-size_t chomp_hash(const void * s);
+void *chomp_copy(const void *p)
+{
+  const chomp_state *s = p;
+  return chomp_create(s->cols, s->heights);
+}
 
-int chomp_compare(const void *s1, const void *s2);
+size_t chomp_hash(const void * p)
+{
+  const chomp_state *s = p;
+  
+  size_t hash = 0;
+  for (size_t c = 0; c < s->cols; c++)
+    {
+      hash = (hash * 13) + s->heights[c];
+    }
+  return hash;
+}
+
+int chomp_compare(const void *p1, const void *p2)
+{
+  const chomp_state *s1 = p1;
+  const chomp_state *s2 = p2;
+
+  size_t c = 0;
+  while (c < s1->cols && c < s2->cols && s1->heights[c] == s2->heights[c])
+    {
+      c++;
+    }
+
+  size_t h1 = c < s1->cols ? s1->heights[c] : 0;
+  size_t h2 = c < s2->cols ? s2->heights[c] : 0;
+
+  if (h1 < h2)
+    {
+      return -1;
+    }
+  else if (h1 > h2)
+    {
+      return 1;
+    }
+  else
+    {
+      return 0;
+    }
+}
 
 void chomp_free(void *s)
 {
