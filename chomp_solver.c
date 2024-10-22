@@ -4,7 +4,8 @@
 #include "chomp.h"
 #include "gmap.h"
 
-void solve_chomp(const chomp_state *start, chomp_move *win);
+void solve_chomp(const chomp_state *start, chomp_move *win, gmap *memo);
+void free_value(const void *key, void *value, void *context);
 
 int main(int argc, char **argv)
 {
@@ -30,7 +31,10 @@ int main(int argc, char **argv)
   chomp_state *s = chomp_create(argc - 1, heights);
   free(heights);
   chomp_move win;
-  solve_chomp(s, &win);
+
+  gmap *memo = gmap_create(chomp_copy, chomp_compare, chomp_hash, chomp_free);
+			
+  solve_chomp(s, &win, memo);
   if (win.row == 0 && win.col == 0)
     {
       fprintf(stdout, "give up\n");
@@ -41,15 +45,24 @@ int main(int argc, char **argv)
     }
 
   chomp_destroy(s);
+  gmap_for_each(memo, free_value, NULL);
+  gmap_destroy(memo);
   return 0;
 }
    
-void solve_chomp(const chomp_state *start, chomp_move *win)
+void solve_chomp(const chomp_state *start, chomp_move *win, gmap *memo)
 {
   if (chomp_is_terminal(start))
     {
       win->row = -1;
       win->col = -1;
+      return;
+    }
+
+  if (gmap_contains_key(memo, start))
+    {
+      chomp_move *m = gmap_get(memo, start);
+      *win = *m;
       return;
     }
   
@@ -64,7 +77,7 @@ void solve_chomp(const chomp_state *start, chomp_move *win)
 	  chomp_move try = {r, c};
 	  chomp_state *next = chomp_next(start, &try);
 	  chomp_move m;
-	  solve_chomp(next, &m);
+	  solve_chomp(next, &m, memo);
 	  chomp_destroy(next);
 	  if (m.row == 0 && m.col == 0)
 	    {
@@ -73,4 +86,12 @@ void solve_chomp(const chomp_state *start, chomp_move *win)
 	    }
 	}
     }
+  chomp_move *copy = malloc(sizeof(*copy));
+  *copy = *win;
+  gmap_put(memo, start, copy);
+}
+
+void free_value(const void *key, void *value, void *context)
+{
+  free(value);
 }
