@@ -99,7 +99,7 @@ int chomp_compare(const void *p1, const void *p2);
  *
  * @param p a valid pointer to a state, non-NULL
  */
-void *chomp_copy(const void *p)
+void *chomp_copy(const void *p);
 
 /**
  * Destroys the given chomp state.
